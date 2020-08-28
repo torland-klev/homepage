@@ -1,0 +1,28 @@
+
+.HomeView {
+  display: flex;
+  flex-wrap: wrap;
+  border: 2px dashed black;
+  overflow-y: scroll;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  margin-top: 1%;
+}
+
+.HomeView::-webkit-scrollbar {
+  display: none;
+}
+
+.GridItem {
+  margin: 2%;
+  width: 100%;
+  border: 2px solid black;
+  width: 320px;
+  height: 180px;
+  font-family: "consolas";
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}

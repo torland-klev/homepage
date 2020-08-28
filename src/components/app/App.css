@@ -1,0 +1,15 @@
+.Container {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.Body {
+  min-height: 80vh;
+  width: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-y: hidden;
+}
