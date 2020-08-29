@@ -1,5 +1,6 @@
 import React from 'react';
 import Square from './Square';
+import ReactDOM from "react-dom";
 import '../styles/board.css';
 
 class Board extends React.Component {
@@ -9,7 +10,7 @@ class Board extends React.Component {
       squares: [],
       pieces: {},
       moveInProgress: false,
-      clickedPieceID: null,
+      clickedSquare: null,
       fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
       whiteMove: true,
       fullMoveCounter: 0,
@@ -18,75 +19,61 @@ class Board extends React.Component {
       moves: [0,0,0]
     }
   }
+
   componentWillMount() {
     this.initBoard();
   }
+
   componentDidMount(){
     this.initPieces();
     this.apiCall(this.state.fen);
   }
 
-  onClick(e){
-    this.startClick(e.pageX, e.pageY);
-  }
-
   /*
-   * This function runs when the board is clicked.
+   * This function runs when a square is clicked.
    * If no previous pieces have been pressed, it will
    * do some error checking and mark the piece as checked.
    * The next time a square is pressed, it will try to call
    * completeClick().
    */
-  startClick(xPos, yPos){
-    /* Get the position of the clicked square */
-    var xID = (xPos > 487) ? -1 : Math.floor((xPos-8)/60);
-    var yID = (yPos > 487) ? -1 : Math.floor((yPos-8)/60);
-    if (xID * yID < 0){
-      return 0;
+  squareWasClicked = (index) => {
+    const square = this.state.squares[index];
+    if (!this.state.moveInProgress && square.piece == null){
+      this.setState({moveInProgress: false, clickedSquare: null});
     }
-    var squareID = xID + (yID * 8);
-    const squares = this.state.squares;
-    /* Checks if first clicked square is empty */
-    if (!this.state.moveInProgress && squares[squareID].piece == null){
-      this.setState({moveInProgress: false, clickedPieceID: null});
-    }
-    /* First piece allready chosen, complete the placement of the piece */
     else if (this.state.moveInProgress){
-      this.completeClick(squareID);
+      this.completeClick(square);
     }
-    /* Make sure that only the white can move white pieces */
-    else if (this.state.whiteMove && squares[squareID].piece.owner === 'black') {
-      this.setState({moveInProgress: false, clickedPieceID: null});
+    else if (this.state.whiteMove && square.piece.owner === 'black') {
+      this.setState({moveInProgress: false, clickedSquare: null});
     }
     /* Make sure that only the black can move black pieces */
-    else if ((!this.state.whiteMove) && squares[squareID].piece.owner === 'white') {
-      this.setState({moveInProgress: false, clickedPieceID: null});
+    else if ((!this.state.whiteMove) && square.piece.owner === 'white') {
+      this.setState({moveInProgress: false, clickedSquare: null});
     }
     /* First click successfull, waiting for next click */
     else {
-      this.setState({moveInProgress: true, clickedPieceID: squareID});
+      this.setState({moveInProgress: true, clickedSquare: square});
     }
   }
-
 
   /*
    * Function runs when when a move is in progress.
    * A move is considered in progress when a piece has
    * previously been pressed.
    */
-  completeClick(squareID){
-    const squares = this.state.squares;
-    const piece = squares[this.state.clickedPieceID].piece;
+  completeClick(square){
+    const piece = this.state.clickedSquare.piece;
     let whiteMove = !this.state.whiteMove;
     /* Check for en passant */
-    let enpassant = ((Math.abs(squareID-this.state.clickedPieceID) === 16) && (piece.type === 'Pawn')) ? true : false;
+    let enpassant = ((Math.abs(square.index - piece.location) === 16) && (piece.type === 'Pawn')) ? true : false;
     /* Check for half move, a half move is a move with a piece that has not captured */
-    let halfmove = ((piece.type === 'Pawn') || (squares[squareID].piece)) ? false : true;
-    squares[this.state.clickedPieceID].piece = null;
-    squares[squareID].piece = piece;
+    let halfmove = ((piece.type === 'Pawn') || (square.piece)) ? false : true;
+    this.state.clickedSquare.piece = null;
+    square.piece = piece;
     const moveCounter = this.state.moveCounter + 1;
-    this.writeMove(enpassant, squareID, halfmove);
-    this.setState({moveInProgress: false, clickedPieceID: null, moveCounter: moveCounter, whiteMove: whiteMove});
+    this.writeMove(enpassant, square, halfmove);
+    this.setState({moveInProgress: false, clickedSquare: null, moveCounter: moveCounter, whiteMove: whiteMove});
   }
 
   /*
@@ -95,21 +82,21 @@ class Board extends React.Component {
    * This notation is used for communication with the lichess API
    * All the %20 are actually spaces
    */
-  writeMove(enpassant, squareID, halfmove){
+  writeMove(enpassant, square, halfmove){
     let fenCurrent = '';
     /* Start by printing all the pieces */
     let counter = 0;
     let rowCount = 0;
-    this.state.squares.forEach((square) => {
+    this.state.squares.forEach((sq) => {
       if (!(counter % 8)){
         if (rowCount) fenCurrent += (rowCount);
         rowCount = 0;
         if (counter) fenCurrent+='/';
       }
-      if (square.piece){
+      if (sq.piece){
         if (rowCount) fenCurrent += (rowCount);
         rowCount = 0;
-        fenCurrent += (square.piece.notation);
+        fenCurrent += (sq.piece.notation);
       } else{
         rowCount++;
       }
@@ -125,7 +112,7 @@ class Board extends React.Component {
              en passant or halfmove clock. */
     fenCurrent += '%20KQkq';
     /* Add enpassant rule */
-    fenCurrent += (enpassant) ? ('%20' + this.state.squares[squareID].chessId) : '%20-';
+    fenCurrent += (enpassant) ? ('%20' + square.chessId) : '%20-';
     /* Add halfmove clock, still not enforced though */
     if (halfmove){
       let halfMoveCounter = this.state.halfMoveCounter + 1;
@@ -295,7 +282,7 @@ class Board extends React.Component {
   }
 
   render() {
-
+    const clikedSquare = this.squareWasClicked.bind(this);
     let squares = this.state.squares.map(function(square, index){
       return(
         <Square
@@ -305,7 +292,8 @@ class Board extends React.Component {
           row={square.row}
           col={square.col}
           color={square.color}
-          piece={square.piece}/>
+          piece={square.piece}
+          onClick={() => clikedSquare(square.index)}/>
       )});
 
     // Process squares into rows of length 8
@@ -319,7 +307,7 @@ class Board extends React.Component {
     return (
       <div className="wrapper">
         <main>
-          <div className="board" onClick={this.onClick.bind(this)}>
+          <div className="board">
             {rows.map((row, index) => {
               return <div className="row" key={index}>{row}</div>
             })}

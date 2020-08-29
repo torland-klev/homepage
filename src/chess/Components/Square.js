@@ -35,7 +35,7 @@ class Square extends React.Component {
     piece = (piece) ? React.createElement(chessPieces[piece.type], {ref: 'piece', owner: piece.owner}) : '';
 
     return (
-      <div style={(this.props.color === 'white') ? whiteStyle : blackStyle}>
+      <div onClick={this.props.onClick} style={(this.props.color === 'white') ? whiteStyle : blackStyle}>
         {/*
         Used to display column + row name
         {this.props.col + '' + this.props.row}
