@@ -1,5 +1,6 @@
 .Footer {
-  height: 10vh;
+  min-height: 40px;
+  height: 5vh;
   width: 80%;
   display: flex;
   align-items: center;

@@ -1,7 +1,8 @@
 .Banner {
   text-align: center;
-  height: 10%;
+  height: 8%;
   width: 85%;
+  min-width: 520px;
   display: flex;
   flex-direction: row;
   align-items: center;
