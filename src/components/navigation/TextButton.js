@@ -11,7 +11,7 @@ export default class TextButton extends Component{
 
   render(){
 
-    const fromProps = (this.props.text) ? this.props.text : this.state.time;
+    const fromProps = (this.props.text) ? this.props.text : this.state.title;
     const text = (this.props.bold) ? <b>{fromProps}</b> : fromProps;
 
     return(

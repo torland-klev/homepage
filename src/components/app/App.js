@@ -6,6 +6,7 @@ import { Banner, Footer } from '../';
 import SiteImage from '../siteimage/SiteImage';
 import { HomeView, ContactView, AboutView, CVView } from '../../views';
 import BannerImg from '../../images/banner.png';
+import Chess from '../../chess';
 
 export default class App extends Component {
   render(){
@@ -19,6 +20,12 @@ export default class App extends Component {
             <Route exact path='/cv' component={CVView} />
             <Route exact path='/me' component={AboutView} />
             <Route exact path='/contact' component={ContactView} />
+
+            <Route exact path='/logic' component={HomeView} />
+            <Route exact path='/code' component={CVView} />
+            <Route exact path='/chess' component={Chess} />
+            <Route exact path='/philosophy' component={ContactView} />
+            <Route exact path='/activity' component={ContactView} />
           </div>
         </BrowserRouter>
         <Footer />

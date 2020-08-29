@@ -1,0 +1,29 @@
+.row {
+  display: flex;
+}
+
+.board {
+  min-width: 480px;
+  min-height: 480px;
+  border: 1px solid black;
+  max-width: 62%;
+}
+
+
+.datawrapper{
+  flex: 1;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row;
+  border: 1px solid black;
+  margin-top: 2px;
+  padding: 5px;
+}
+
+.wrapper{
+  flex: 1 1 0;
+  display: inline-flex;
+  flex-direction: column;
+  margin-top: 2px;
+}

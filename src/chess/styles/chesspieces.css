@@ -1,0 +1,17 @@
+.chesspiece {
+  text-align: center;
+  width: 45px;
+  height: 45px;
+}
+
+.chesspiecePawn{
+  text-align: center;
+  width: 35px;
+  height: 40px;
+}
+
+.chesspieceRook{
+  text-align: center;
+  width: 40px;
+  height: 45px;
+}
