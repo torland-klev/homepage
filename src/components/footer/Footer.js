@@ -16,10 +16,8 @@ export default class Footer extends Component {
   render(){
     return(
       <div className="Footer">
-        <ItemPair first=" " second=" "/>
-        <ItemPair first=<img src={PHONE_IMG} /> second={PHONE_NUMBER} style={{minWidth: "250px"}}/>
+        <ItemPair first=<img src={PHONE_IMG} /> second={PHONE_NUMBER} style={{marginRight: "20px", marginLeft: "20px"}}/>
         <ItemPair first=<img src={EMAIL_IMG} /> second={EMAIL} style={{cursor: "pointer"}} onClick={() => window.location.href = "mailto:" + EMAIL}/>
-        <ItemPair first=" " second=" " style={{marginRight: "70px"}}/>
       </div>
     );
   }
