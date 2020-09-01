@@ -1,0 +1,34 @@
+@import 'node_modules/react-modal-video/scss/modal-video.scss';
+
+.VideoView {
+  display: flex;
+  flex-wrap: wrap;
+  border: 2px dashed black;
+  overflow-y: scroll;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  margin-top: 1%;
+}
+
+.VideoView::-webkit-scrollbar {
+  display: none;
+}
+
+.GridItem h1 {
+  margin-bottom: 0px;
+  margin-top: -6px;
+}
+
+.GridItem {
+  margin: 2%;
+  width: 100%;
+  border: 2px solid black;
+  width: 350px;
+  height: 240px;
+  font-family: "consolas";
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  display: flex;
+}
