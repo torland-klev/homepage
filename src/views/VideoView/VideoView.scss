@@ -20,7 +20,13 @@
   margin-top: -6px;
 }
 
+.GridItem img {
+  width: 150%;
+  height: 140%;
+}
+
 .GridItem {
+  overflow: hidden;
   margin: 2%;
   width: 100%;
   border: 2px solid black;
